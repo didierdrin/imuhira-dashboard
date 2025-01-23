@@ -30,6 +30,8 @@ interface House {
   ownerName: string;
   isActive: boolean;
   isFeatured: boolean;
+  latitude: number;
+  longitude: number;
 }
 
 const Landlord = () => {
@@ -51,15 +53,20 @@ const Landlord = () => {
     size: 0,
     isActive: true,
     isFeatured: false,
+    longitude: 0,
+    latitude: 0,
   });
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "houses"), (snapshot) => {
       setHouses(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        } as House))
+        snapshot.docs.map(
+          (doc) =>
+            ({
+              id: doc.id,
+              ...doc.data(),
+            } as House)
+        )
       );
     });
     return () => unsubscribe();
@@ -120,10 +127,10 @@ const Landlord = () => {
         isFeatured: false,
       });
       setImageFiles(null);
-      
+
       // Reset file input
-      const fileInput = document.getElementById('images') as HTMLInputElement;
-      if (fileInput) fileInput.value = '';
+      const fileInput = document.getElementById("images") as HTMLInputElement;
+      if (fileInput) fileInput.value = "";
     } catch (error) {
       console.error("Error adding house: ", error);
       alert("Failed to add house listing");
@@ -152,7 +159,9 @@ const Landlord = () => {
             type="text"
             placeholder="Property Title"
             value={newHouse.title}
-            onChange={(e) => setNewHouse({ ...newHouse, title: e.target.value })}
+            onChange={(e) =>
+              setNewHouse({ ...newHouse, title: e.target.value })
+            }
             className="p-2 border rounded focus:ring-2 focus:ring-teal-500"
             required
           />
@@ -160,21 +169,55 @@ const Landlord = () => {
             type="text"
             placeholder="Location"
             value={newHouse.location}
-            onChange={(e) => setNewHouse({ ...newHouse, location: e.target.value })}
+            onChange={(e) =>
+              setNewHouse({ ...newHouse, location: e.target.value })
+            }
             className="p-2 border rounded focus:ring-2 focus:ring-teal-500"
             required
           />
+
+          <input
+            type="number"
+            placeholder="Latitude"
+            step="0.0000001"
+            value={newHouse.latitude || ""}
+            onChange={(e) =>
+              setNewHouse({ ...newHouse, latitude: parseFloat(e.target.value) })
+            }
+            className="p-2 border rounded focus:ring-2 focus:ring-teal-500"
+          />
+          <input
+            type="number"
+            placeholder="Longitude"
+            step="0.0000001"
+            value={newHouse.longitude || ""}
+            onChange={(e) =>
+              setNewHouse({
+                ...newHouse,
+                longitude: parseFloat(e.target.value),
+              })
+            }
+            className="p-2 border rounded focus:ring-2 focus:ring-teal-500"
+          />
+
           <input
             type="number"
             placeholder="Price"
             value={newHouse.price || ""}
-            onChange={(e) => setNewHouse({ ...newHouse, price: parseFloat(e.target.value) })}
+            onChange={(e) =>
+              setNewHouse({ ...newHouse, price: parseFloat(e.target.value) })
+            }
             className="p-2 border rounded focus:ring-2 focus:ring-teal-500"
             required
           />
           <select
             value={newHouse.type}
-            onChange={(e) => setNewHouse({ ...newHouse, type: e.target.value as "rent" | "sale" })}
+            onChange={(e) =>
+              setNewHouse({
+                ...newHouse,
+                type: e.target.value as "rent" | "sale",
+              })
+            }
             className="p-2 border rounded focus:ring-2 focus:ring-teal-500"
           >
             <option value="sale">For Sale</option>
@@ -185,7 +228,9 @@ const Landlord = () => {
         <textarea
           placeholder="Description"
           value={newHouse.description}
-          onChange={(e) => setNewHouse({ ...newHouse, description: e.target.value })}
+          onChange={(e) =>
+            setNewHouse({ ...newHouse, description: e.target.value })
+          }
           className="w-full p-2 border rounded focus:ring-2 focus:ring-teal-500"
           rows={4}
           required
@@ -196,21 +241,27 @@ const Landlord = () => {
             type="number"
             placeholder="Bedrooms"
             value={newHouse.bedrooms || ""}
-            onChange={(e) => setNewHouse({ ...newHouse, bedrooms: parseInt(e.target.value) })}
+            onChange={(e) =>
+              setNewHouse({ ...newHouse, bedrooms: parseInt(e.target.value) })
+            }
             className="p-2 border rounded focus:ring-2 focus:ring-teal-500"
           />
           <input
             type="number"
             placeholder="Bathrooms"
             value={newHouse.bathrooms || ""}
-            onChange={(e) => setNewHouse({ ...newHouse, bathrooms: parseInt(e.target.value) })}
+            onChange={(e) =>
+              setNewHouse({ ...newHouse, bathrooms: parseInt(e.target.value) })
+            }
             className="p-2 border rounded focus:ring-2 focus:ring-teal-500"
           />
           <input
             type="number"
             placeholder="Size (sq ft/m)"
             value={newHouse.size || ""}
-            onChange={(e) => setNewHouse({ ...newHouse, size: parseInt(e.target.value) })}
+            onChange={(e) =>
+              setNewHouse({ ...newHouse, size: parseInt(e.target.value) })
+            }
             className="p-2 border rounded focus:ring-2 focus:ring-teal-500"
           />
         </div>
@@ -221,14 +272,18 @@ const Landlord = () => {
           onChange={(e) =>
             setNewHouse({
               ...newHouse,
-              features: e.target.value.split(",").map((feature) => feature.trim()),
+              features: e.target.value
+                .split(",")
+                .map((feature) => feature.trim()),
             })
           }
           className="w-full p-2 border rounded focus:ring-2 focus:ring-teal-500"
         />
 
         <div>
-          <label className="block text-sm font-medium mb-1">Property Images</label>
+          <label className="block text-sm font-medium mb-1">
+            Property Images
+          </label>
           <input
             id="images"
             type="file"
@@ -245,7 +300,9 @@ const Landlord = () => {
             <input
               type="checkbox"
               checked={newHouse.isActive}
-              onChange={(e) => setNewHouse({ ...newHouse, isActive: e.target.checked })}
+              onChange={(e) =>
+                setNewHouse({ ...newHouse, isActive: e.target.checked })
+              }
               className="mr-2"
             />
             Active
@@ -254,7 +311,9 @@ const Landlord = () => {
             <input
               type="checkbox"
               checked={newHouse.isFeatured}
-              onChange={(e) => setNewHouse({ ...newHouse, isFeatured: e.target.checked })}
+              onChange={(e) =>
+                setNewHouse({ ...newHouse, isFeatured: e.target.checked })
+              }
               className="mr-2"
             />
             Featured
@@ -293,7 +352,8 @@ const Landlord = () => {
               </div>
               <p className="text-sm text-gray-600">{house.location}</p>
               <p className="text-sm text-gray-600">
-                {house.bedrooms} beds • {house.bathrooms} baths • {house.size} sq ft
+                {house.bedrooms} beds • {house.bathrooms} baths • {house.size}{" "}
+                sq ft
               </p>
               <div className="flex justify-end space-x-3 mt-4">
                 <button
