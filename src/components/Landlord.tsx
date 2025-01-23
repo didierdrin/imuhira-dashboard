@@ -372,3 +372,7 @@ const Landlord = () => {
 };
 
 export default Landlord;
+
+
+
+// generate an images of a house/modern style not futuristic to add to house listings on my website, do another one

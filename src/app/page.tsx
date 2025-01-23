@@ -58,7 +58,7 @@ function Dashboard() {
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <div className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-purple-500 min-h-screen flex flex-col text-white p-5 transition-all duration-300`}>
+      <div className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-black min-h-screen flex flex-col text-white p-5 transition-all duration-300`}>
         <div className='flex flex-col flex-grow'>
         <button onClick={() => setSidebarOpen(!sidebarOpen)} className=" mb-5 w-full text-left hover:text-slate-300">
           {sidebarOpen ? '« ' : '»'}
